@@ -2,3 +2,4 @@
 .gotools/
 release/
 *.tfstate*
+lib/archetype/archetype.go
