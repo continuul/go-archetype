@@ -11,6 +11,7 @@ GOLDFLAGS="-X $(GIT_IMPORT)/lib/version.GitCommit=$(GIT_COMMIT)$(GIT_DIRTY) \
 export GOLDFLAGS
 
 # Go tools
+GOTAGS ?=
 GOTOOLS=\
 	github.com/hashicorp/go-bindata/... \
 	golang.org/x/lint/golint
@@ -65,6 +66,12 @@ generate:
 release:
 	semtag final -s minor
 	git push --follow-tags
+
+#:help: test        | Installs go tools
+.PHONY: test
+test:
+	@echo "===================== lib =====================" | tee -a test.log
+	@cd lib && { go test -v $(GOTEST_FLAGS) -tags '$(GOTAGS)' ./... 2>&1 ; echo $$? >> ../exit.log ; } | tee -a ../test.log | egrep '^(ok|FAIL|panic:|--- FAIL|--- PASS)'
 
 #:help: tools       | Installs go tools
 .PHONY: tools
