@@ -39,7 +39,7 @@ Usage:
   go-archetype [command]
 
 Available Commands:
-  generate    A brief description of your command
+  generate    Generate a starter project from an archetype
   help        Help about any command
   list        List the available archetypes
   version     Print version information
