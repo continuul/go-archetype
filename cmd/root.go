@@ -15,12 +15,18 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "go-archetype",
 	Short: "A project templating toolkit",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Long: `
+Archetype is a project templating toolkit. An archetype is defined as an
+original pattern or model from which all other things of the same kind are made.
+Archetype is a system that provides a consistent means of generating projects of
+virtually any kind.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Using archetypes provides a great way to enable developers quickly in a way
+consistent with best practices employed by your project or organization.  We use
+archetypes to try and get our users up and running as quickly as possible by providing a
+sample project while introducing new users to current best practices. In a matter of
+seconds, a new user can have a working project to use as a jumping board for their
+work.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
