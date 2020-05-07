@@ -45,8 +45,8 @@ changelog:
 #:help: changever   | Change the product version to the next consecutive version number
 .PHONY: changever
 changever:
-	find bin -type f -name ws -exec sed -i "" "s/VERSION=.*/VERSION=\"$(VERSION)\"/g" {} \;
-	git add bin/ws && git commit -m "Updated VERSION"
+	find lib/version -type f -name version.go -exec sed -i "" "s/Version = .*/Version = \"$(VERSION)\"/g" {} \;
+	git add lib/version/version.go && git commit -m "Updated VERSION"
 
 #:help: clean       | Clean the build artifacts
 .PHONY: clean
