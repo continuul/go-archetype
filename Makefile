@@ -6,7 +6,7 @@ GIT_COMMIT ?= $(shell git rev-parse --short HEAD)
 GIT_DESCRIBE ?= $(shell git describe --tags --always --match "v*")
 GIT_DIRTY=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 GIT_IMPORT ?= github.com/continuul/go-template/lib/version
-GOLDFLAGS = -X $(GIT_IMPORT).GitCommit=$(GIT_COMMIT)$(GIT_DIRTY) -X $(GIT_IMPORT).GitDescribe=$(GIT_DESCRIBE)
+GOLDFLAGS = -X $(GIT_IMPORT).GitCommit=$(GIT_COMMIT)$(GIT_DIRTY) -X $(GIT_IMPORT).GitDescribe=$(GIT_DESCRIBE)  -X $(GIT_IMPORT).VersionPrerelease=beta
 export GOLDFLAGS
 
 # Go tools
@@ -42,11 +42,17 @@ changelog:
 	git-chglog -o CHANGELOG.md --next-tag $(VERSION)
 	git add CHANGELOG.md && git commit -m "Updated CHANGELOG"
 
-#:help: changever   | Change the product version to the next consecutive version number.
+#:help: changever   | Change the product version to the next consecutive version number
 .PHONY: changever
 changever:
 	find bin -type f -name ws -exec sed -i "" "s/VERSION=.*/VERSION=\"$(VERSION)\"/g" {} \;
 	git add bin/ws && git commit -m "Updated VERSION"
+
+#:help: clean       | Clean the build artifacts
+.PHONY: clean
+clean:
+	@go clean
+	@rm -fr release
 
 #:help: generate    | Generate archetype static assets
 .PHONY: generate
