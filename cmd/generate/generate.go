@@ -1,13 +1,12 @@
-package cmd
+package generate
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
-// generateCmd represents the generate command
-var generateCmd = &cobra.Command{
+// Cmd represents the generate command
+var Cmd = &cobra.Command{
 	Use:   "generate",
 	Short: "Generate a starter project from an archetype",
 	Long: `Generates a new project from an archetype, or
@@ -18,8 +17,6 @@ updates the actual project if using a partial archetype.`,
 }
 
 func init() {
-	rootCmd.AddCommand(generateCmd)
-
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

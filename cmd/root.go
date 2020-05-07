@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/continuul/go-archetype/cmd/generate"
+	"github.com/continuul/go-archetype/cmd/list"
+	"github.com/continuul/go-archetype/cmd/version"
 	"github.com/spf13/cobra"
 	"os"
 
@@ -43,6 +46,12 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+
+	rootCmd.AddCommand(
+		version.Cmd,
+		generate.Cmd,
+		list.Cmd,
+	)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

@@ -1,4 +1,4 @@
-package cmd
+package list
 
 import (
 	"fmt"
@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// listCmd represents the list command
-var listCmd = &cobra.Command{
+// Cmd represents the list command
+var Cmd = &cobra.Command{
 	Use:   "list",
 	Short: "List the available archetypes",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -24,8 +24,6 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(listCmd)
-
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
