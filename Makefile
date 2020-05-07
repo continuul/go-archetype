@@ -26,7 +26,7 @@ help: ; @sed -n 's/^#:help://p' Makefile
 
 #:help: build       | Build the executables, including all cross-compilation targets
 .PHONY: build
-build:
+build: generate
 	@echo "==> Building go-archetype for all GOARCH/GOOS..."
 	$(foreach GOOS, $(PLATFORMS),\
 	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); go build -ldflags '$(GOLDFLAGS)' -v -o release/$(NAME)-$(GOOS)-$(GOARCH) )))
