@@ -9,11 +9,9 @@ import (
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "A brief description of your command",
+	Short: "Generate a starter project from an archetype",
 	Long: `Generates a new project from an archetype, or
-updates the actual project if using a partial archetype.
-
-to quickly create a Cobra application.`,
+updates the actual project if using a partial archetype.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("generate called")
 	},
