@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/continuul/go-archetype/lib/version"
+	"runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -12,7 +13,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print version information",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(version.GetHumanVersion())
+		fmt.Println(fmt.Sprintf("go-archetype version %s (%s) %s/%s", version.GetHumanVersion(), version.GitCommit, runtime.GOOS, runtime.GOARCH))
 	},
 }
 
