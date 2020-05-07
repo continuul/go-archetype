@@ -1,6 +1,7 @@
 [![Continuul][logo]](https://continuul.solutions)
 
-# go-archetype [![Slack Community](https://img.shields.io/badge/slack-@continuul/green.svg?logo=slack)](https://slack.continuul.com)
+# go-archetype [![Slack Community](https://img.shields.io/badge/slack-@continuul/green.svg?logo=slack)](https://slack.continuul.com) [![Go Report Card](https://goreportcard.com/badge/github.com/continuul/go-archetype)](https://goreportcard.com/report/github.com/continuul/go-archetype)
+
 
 Archetype is a project templating toolkit. An archetype is defined as an
 original pattern or model from which all other things of the same kind are made.
