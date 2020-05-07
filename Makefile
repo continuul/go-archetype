@@ -1,12 +1,13 @@
 NAME=go-archetype
-VERSION:=$(shell semtag final -s minor -o)
+VERSION:=$(shell semtag getfinal)
 
 # Git version information
 GIT_COMMIT ?= $(shell git rev-parse --short HEAD)
 GIT_DESCRIBE ?= $(shell git describe --tags --always --match "v*")
 GIT_DIRTY=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
-GIT_IMPORT ?= github.com/continuul/go-template/lib/version
-GOLDFLAGS = -X $(GIT_IMPORT).GitCommit=$(GIT_COMMIT)$(GIT_DIRTY) -X $(GIT_IMPORT).GitDescribe=$(GIT_DESCRIBE)  -X $(GIT_IMPORT).VersionPrerelease=beta
+GIT_IMPORT="github.com/continuul/go-archetype"
+GOLDFLAGS="-X $(GIT_IMPORT)/lib/version.GitCommit=$(GIT_COMMIT)$(GIT_DIRTY) \
+		   -X $(GIT_IMPORT)/lib/version.GitDescribe=$(GIT_DESCRIBE)"
 export GOLDFLAGS
 
 # Go tools
@@ -29,7 +30,7 @@ help: ; @sed -n 's/^#:help://p' Makefile
 build: generate
 	@echo "==> Building go-archetype for all GOARCH/GOOS..."
 	$(foreach GOOS, $(PLATFORMS),\
-	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); go build -ldflags '$(GOLDFLAGS)' -v -o release/$(NAME)-$(GOOS)-$(GOARCH) )))
+	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); go build -ldflags $(GOLDFLAGS) -v -o release/$(NAME)-$(GOOS)-$(GOARCH) )))
 
 #:help: check       | Runs the pre-commit hooks to check the files
 .PHONY: check

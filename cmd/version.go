@@ -13,7 +13,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print version information",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(fmt.Sprintf("go-archetype version %s (%s) %s/%s", version.GetHumanVersion(), version.GitCommit, runtime.GOOS, runtime.GOARCH))
+		fmt.Println(fmt.Sprintf("go-archetype version %s %s/%s", version.GetHumanVersion(), runtime.GOOS, runtime.GOARCH))
 	},
 }
 
