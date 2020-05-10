@@ -29,7 +29,7 @@ help: ; @sed -n 's/^#:help://p' Makefile
 #:help: assets      | Generate archetype static assets
 .PHONY: assets
 assets:
-	@go-bindata --prefix archetypes -o generated/archetype/archetype.go -pkg archetype ./archetypes/...
+	@go-bindata --prefix archetypes -o lib/archetype/archetype.go -pkg archetype ./archetypes/...
 
 #:help: build       | Build the executables, including all cross-compilation targets
 .PHONY: build
@@ -38,7 +38,7 @@ build: assets
 	$(foreach GOOS, $(PLATFORMS),\
 	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); go build -ldflags $(GOLDFLAGS) -v -o release/$(NAME)-$(GOOS)-$(GOARCH) )))
 
-CHECK_FILES:=$(shell find . -type f | grep -v generated | grep -v .idea | grep -v .git)
+CHECK_FILES:=$(shell find . -type f | grep -v generated | grep -v .idea | grep -v .git | grep -v lib/archetype/archetype.go)
 
 #:help: check       | Runs the pre-commit hooks to check the files
 .PHONY: check

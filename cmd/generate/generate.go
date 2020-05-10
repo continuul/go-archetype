@@ -3,7 +3,7 @@ package generate
 import (
 	"bytes"
 	"fmt"
-	"github.com/continuul/go-archetype/generated/archetype"
+	"github.com/continuul/go-archetype/lib/archetype"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -13,6 +13,10 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+)
+
+const (
+	metadataFile string = "archetype-metadata.yaml"
 )
 
 var (
@@ -37,7 +41,7 @@ updates the actual project if using a partial archetype.`,
 				fmt.Errorf("archetypes does not have metadata: %s", err)
 			}
 			config = result
-			if err := RestoreAssets(archetypeName, ""); err != nil {
+			if err := RestoreAssets("", archetypeName); err != nil {
 				fmt.Errorf("failed to write file: %s", err)
 			}
 		},
@@ -47,48 +51,6 @@ updates the actual project if using a partial archetype.`,
 func init() {
 	Cmd.PersistentFlags().StringVarP(&archetypeName, "name", "n", "", "name of selected archetype")
 	Cmd.PersistentFlags().StringVarP(&archetypePath, "path", "p", "", "path to target directory")
-}
-
-// RestoreAsset restores an asset under the given directory
-func RestoreAsset(dir, name string) error {
-	data, err := archetype.Asset(name)
-	if err != nil {
-		return err
-	}
-	info, err := archetype.AssetInfo(name)
-	if err != nil {
-		return err
-	}
-	path := _filePath(dir, filepath.Dir(name))
-	if path != "" {
-		err = os.MkdirAll(path, os.FileMode(0755))
-		if err != nil {
-			return err
-		}
-	}
-	var params = make(map[string]interface{})
-	for k, v := range config.Parameters {
-		params[k] = v.Default
-	}
-	tmpl, err := template.New(name).Parse(string(data))
-	if err != nil {
-		return err
-	}
-	var b bytes.Buffer
-	err = tmpl.Execute(&b, params)
-	if err != nil {
-		return err
-	}
-
-	err = ioutil.WriteFile(_filePath(dir, name), b.Bytes(), info.Mode())
-	if err != nil {
-		return err
-	}
-	err = os.Chtimes(_filePath(dir, name), info.ModTime(), info.ModTime())
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // Parameter of the archetype
@@ -125,6 +87,52 @@ func parse(dir, name string) (c Config, err error) {
 		log.Fatal(err)
 	}
 	return result, nil
+}
+
+// RestoreAsset restores an asset under the given directory
+func RestoreAsset(dir, name string) error {
+	if filepath.Base(name) == metadataFile {
+		return nil
+	}
+	data, err := archetype.Asset(name)
+	if err != nil {
+		return err
+	}
+	info, err := archetype.AssetInfo(name)
+	if err != nil {
+		return err
+	}
+	path := _filePath(dir, filepath.Dir(name))
+	if path != "" {
+		err = os.MkdirAll(path, os.FileMode(0755))
+		if err != nil {
+			return err
+		}
+	}
+	var params = make(map[string]interface{})
+	for k, v := range config.Parameters {
+		params[k] = v.Default
+	}
+	tmpl, err := template.New(name).Parse(string(data))
+	if err != nil {
+		return err
+	}
+	var b bytes.Buffer
+	err = tmpl.Execute(&b, params)
+	if err != nil {
+		return err
+	}
+
+	file := _filePath(dir, name)
+	err = ioutil.WriteFile(file, b.Bytes(), info.Mode())
+	if err != nil {
+		return err
+	}
+	err = os.Chtimes(file, info.ModTime(), info.ModTime())
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // RestoreAssets restores an asset under the given directory recursively

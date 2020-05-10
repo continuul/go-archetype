@@ -14,4 +14,3 @@ repos:
       - id: shellcheck
       - id: gofmt
       - id: golint
-        exclude: generated/archetype/archetype.go
