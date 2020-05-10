@@ -13,7 +13,7 @@ export GOLDFLAGS
 # Go tools
 GOTAGS ?=
 GOTOOLS=\
-	github.com/hashicorp/go-bindata/... \
+	github.com/go-bindata/go-bindata/... \
 	golang.org/x/lint/golint
 
 CGO_ENABLED ?= 0
@@ -26,17 +26,24 @@ PLATFORMS ?= darwin linux windows
 .PHONY: help
 help: ; @sed -n 's/^#:help://p' Makefile
 
+#:help: assets      | Generate archetype static assets
+.PHONY: assets
+assets:
+	@go-bindata --prefix archetypes -o generated/archetype/archetype.go -pkg archetype ./archetypes/...
+
 #:help: build       | Build the executables, including all cross-compilation targets
 .PHONY: build
-build: generate
+build: assets
 	@echo "==> Building go-archetype for all GOARCH/GOOS..."
 	$(foreach GOOS, $(PLATFORMS),\
 	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); go build -ldflags $(GOLDFLAGS) -v -o release/$(NAME)-$(GOOS)-$(GOARCH) )))
 
+CHECK_FILES:=$(shell find . -type f | grep -v generated | grep -v .idea | grep -v .git)
+
 #:help: check       | Runs the pre-commit hooks to check the files
 .PHONY: check
 check:
-	pre-commit run --all-files
+	@pre-commit run --files $(CHECK_FILES)
 
 #:help: changelog   | Build the changelog
 .PHONY: changelog
@@ -55,11 +62,6 @@ changever:
 clean:
 	@go clean
 	@rm -fr release
-
-#:help: generate    | Generate archetype static assets
-.PHONY: generate
-generate:
-	@go-bindata --prefix archetypes -o lib/archetype/archetype.go -pkg archetype ./archetypes/...
 
 #:help: release     | Release the product, setting the tag and pushing.
 .PHONY: release

@@ -1,0 +1,9 @@
+parameters:
+  message:
+    description: "Message, what to display in output"
+    default: "hello world"
+    type: string
+  project:
+    description: "Message, what to display in output"
+    default: "terraform-hello-world"
+    type: string

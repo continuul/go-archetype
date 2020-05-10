@@ -3,5 +3,6 @@
 release/
 *.tfstate*
 lib/archetype/archetype.go
+generated/
 test.log
 exit.log
